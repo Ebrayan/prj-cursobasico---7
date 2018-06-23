@@ -1,0 +1,852 @@
+Index: app/src/androidTest/java/com/example/thebryan/conecta4/ExampleInstrumentedTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/androidTest/java/com/example/thebryan/conecta4/ExampleInstrumentedTest.java	(date 1529762377377)
++++ app/src/androidTest/java/com/example/thebryan/conecta4/ExampleInstrumentedTest.java	(date 1529762377377)
+@@ -0,0 +1,26 @@
++package com.example.thebryan.conecta4;
++
++import android.content.Context;
++import android.support.test.InstrumentationRegistry;
++import android.support.test.runner.AndroidJUnit4;
++
++import org.junit.Test;
++import org.junit.runner.RunWith;
++
++import static org.junit.Assert.assertEquals;
++
++/**
++ * Instrumented test, which will execute on an Android device.
++ *
++ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
++ */
++@RunWith(AndroidJUnit4.class)
++public class ExampleInstrumentedTest {
++    @Test
++    public void useAppContext() {
++        // Context of the app under test.
++        Context appContext = InstrumentationRegistry.getTargetContext();
++
++        assertEquals("com.example.thebryan.conecta4", appContext.getPackageName());
++    }
++}
+Index: app/src/main/java/com/example/thebryan/conecta4/Modelos/Aplicacion.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/thebryan/conecta4/Modelos/Aplicacion.java	(date 1529762380078)
++++ app/src/main/java/com/example/thebryan/conecta4/Modelos/Aplicacion.java	(date 1529762380078)
+@@ -0,0 +1,29 @@
++package com.example.thebryan.conecta4.Modelos;
++
++import android.content.Intent;
++
++public class Aplicacion {
++    public static final int MULTI = 2;
++    public static String jugador1 = "";
++    public static String jugador2 = "";
++    public static Celdas[] cell = new Celdas[42];
++    public static int Columnas[] = {6, 6, 6, 6, 6, 6, 6};
++    public static int Modo;
++    public static int SINGLE = 1;
++    public static int turno = 1;
++    public static Intent GameIntent;
++    private static int Ancho = 1;
++
++    public Aplicacion() {
++
++    }
++
++    public static int getAncho() {
++        return Ancho;
++    }
++
++
++    public static void guarda_tamano_pantalla(int ancho) {
++        Ancho = ancho;
++    }
++}
+Index: app/src/main/java/com/example/thebryan/conecta4/Modelos/Celdas.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/thebryan/conecta4/Modelos/Celdas.java	(date 1529762380386)
++++ app/src/main/java/com/example/thebryan/conecta4/Modelos/Celdas.java	(date 1529762380386)
+@@ -0,0 +1,434 @@
++package com.example.thebryan.conecta4.Modelos;
++
++import android.annotation.SuppressLint;
++import android.content.Context;
++import android.graphics.Color;
++import android.graphics.drawable.GradientDrawable;
++import android.media.MediaPlayer;
++import android.support.annotation.NonNull;
++import android.view.MotionEvent;
++import android.view.View;
++import android.widget.Button;
++import android.widget.FrameLayout;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import com.example.thebryan.conecta4.Game;
++import com.example.thebryan.conecta4.R;
++
++
++@SuppressLint("ViewConstructor")
++public class Celdas extends FrameLayout {
++    public static final int COLOR_ROJO = 1;
++    public static final int COLOR_VERDE = 2;
++    public static int COLOR_BLANCO = 0;
++    static boolean inicio_el_game = false;
++    static int celdaAnterior;
++    Contenedor Contenedor;
++    int ID;
++    GradientDrawable shapeVerde = new GradientDrawable();
++    GradientDrawable shapeVerdeBorde = new GradientDrawable();
++    GradientDrawable shapeRojo = new GradientDrawable();
++    GradientDrawable shapeRojoBorde = new GradientDrawable();
++    int valorFila = 1;
++    int columnaAleatoria;
++    MediaPlayer mp;
++    int Colour = COLOR_BLANCO;
++    TextView txtWinner;
++    Button btn = new Button(getContext());
++    int ValorDiagonal;
++    int DiagonalInversa;
++    String ganador = "";
++    private int columna;
++    private int fila;
++
++    @SuppressLint("ClickableViewAccessibility")
++    public Celdas(@NonNull Context context, Contenedor contenedor, int id) {
++        super(context);
++
++        Contenedor = contenedor;
++
++        ID = id;
++
++        this.addView(contenedor);
++
++        mp = MediaPlayer.create(getContext(), R.raw.s2);
++
++        btn.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                columnaAleatoria = (int) (Math.random() * 7) + 1;
++                int i = 0;
++                while (llenaContenedorCorrespondiente(columnaAleatoria)) {
++                    columnaAleatoria = (int) (Math.random() * 7) + 1;
++                    i++;
++                }
++            }
++        });
++
++
++        OnTouchListener touchE = new OnTouchListener() {
++            @SuppressLint("ClickableViewAccessibility")
++            @Override
++            public boolean onTouch(View v, MotionEvent event) {
++                if (!mp.isPlaying()) {
++                    mp.start();
++                }
++                switch (event.getAction() & MotionEvent.ACTION_MASK) {
++                    case MotionEvent.ACTION_DOWN:
++                        for (int i = 0; i < 42; i++) {
++                            if (Aplicacion.cell[i].getColumna() == getColumna()) {
++                                Aplicacion.cell[i].cambiaBackground(Color.RED);
++                            }
++                        }
++                        break;
++                    case MotionEvent.ACTION_UP:
++
++                        for (int i = 0; i < 42; i++) {
++                            if (Aplicacion.cell[i].getColumna() == getColumna()) {
++                                Aplicacion.cell[i].setBackgroundResource(0);
++                            }
++                        }
++                        llenaContenedorCorrespondiente(getColumna());
++                        inicio_el_game = true;
++
++                        if (Aplicacion.Modo == Aplicacion.SINGLE) {
++                            btn.performClick();
++                        }
++                        break;
++                }
++                return true;
++            }
++        };
++
++
++        this.setOnTouchListener(touchE);
++        shapeVerde.setShape(GradientDrawable.RECTANGLE);
++        shapeVerde.setColor(Color.GREEN);
++        shapeVerde.setCornerRadius(500.0f);
++        shapeVerde.setSize(Aplicacion.getAncho() / 8, Aplicacion.getAncho() / 8);
++
++        shapeRojo.setShape(GradientDrawable.RECTANGLE);
++        shapeRojo.setColor(Color.RED);
++        shapeRojo.setCornerRadius(500.0f);
++        shapeRojo.setSize(Aplicacion.getAncho() / 8, Aplicacion.getAncho() / 8);
++
++        shapeRojoBorde.setShape(GradientDrawable.RECTANGLE);
++        shapeRojoBorde.setColor(Color.RED);
++        shapeRojoBorde.setStroke(5, Color.YELLOW);
++        shapeRojoBorde.setCornerRadius(500.0f);
++        shapeRojoBorde.setSize(Aplicacion.getAncho() / 8, Aplicacion.getAncho() / 8);
++
++        shapeVerdeBorde.setShape(GradientDrawable.RECTANGLE);
++        shapeVerdeBorde.setColor(Color.GREEN);
++        shapeVerdeBorde.setStroke(5, Color.YELLOW);
++        shapeVerdeBorde.setCornerRadius(500.0f);
++        shapeVerdeBorde.setSize(Aplicacion.getAncho() / 8, Aplicacion.getAncho() / 8);
++
++    }
++
++    // ---------------------------------------------------------------------------------------------------------//
++    private void cambiaBackground(int color) {
++
++        this.setBackgroundColor(color);
++
++    }
++
++    // -------------------------------------------------------------------------------------------------------------//
++    public void llenaContainer(int columnna, int fila, int Turno) {
++        int idActual = 0;
++        int valor_de_Fila = 0;
++        int diagonal_inversa = 0;
++        int diagonal = 0;
++
++        for (int i = 0; i < Aplicacion.cell.length; ) {
++            if (Aplicacion.cell[i].getColumna() == columnna && Aplicacion.cell[i].getFila() == fila) {
++                idActual = i;
++                diagonal = Aplicacion.cell[idActual].getValorDiagonal();
++                valor_de_Fila = Aplicacion.cell[i].getValorFila();
++                diagonal_inversa = Aplicacion.cell[i].getDiagonalInversa();
++                if (Aplicacion.turno == COLOR_VERDE) {
++                    Aplicacion.cell[i].getContenedor().setBackground(shapeVerdeBorde);
++                    Aplicacion.cell[i].setColourCelda(COLOR_VERDE);
++                    Aplicacion.turno = COLOR_ROJO;
++                    Game.imageTurno.setImageResource(R.drawable.rojo);
++                } else {
++                    Aplicacion.cell[i].getContenedor().setBackground(shapeRojoBorde);
++                    Aplicacion.cell[i].setColourCelda(COLOR_ROJO);
++                    Aplicacion.turno = COLOR_VERDE;
++                    Game.imageTurno.setImageResource(R.drawable.verde);
++                }
++            }
++            i++;
++        }
++        switch (Aplicacion.turno) {
++            case COLOR_VERDE:
++                if (inicio_el_game) {
++                    revieteCeldaAnterior(celdaAnterior, 2);
++                }
++                break;
++            case COLOR_ROJO:
++                if (inicio_el_game) {
++                    revieteCeldaAnterior(celdaAnterior, 1);
++                }
++
++        }
++        celdaAnterior = idActual;
++
++
++        if (fila > 3) verificaFila(Turno, valor_de_Fila);
++        else {
++            verificaColumna(Turno, columnna);
++            verificaFila(Turno, valor_de_Fila);
++            if (diagonal_inversa != 0) {
++                verificaDiagonalInversa(Turno, diagonal_inversa);
++            }
++
++            if (diagonal != 0 && diagonal != 1 && diagonal != 2 && diagonal != 9 && diagonal != 10 && diagonal != 11) {
++                verificaDiagonal(Turno, diagonal);
++            }
++        }
++    }
++
++    private void revieteCeldaAnterior(int ca, int color) {
++//        if(color==Celdas.COLOR_ROJO) {
++//            Aplicacion.cell[ca].getContenedor().setBackground(shapeRojo);
++//        }else {
++//            Aplicacion.cell[ca].getContenedor().setBackground(shapeVerde);
++//        }
++    }
++
++    // ------------------------------------------------------------------------------------------------------------------//
++// -------------------------metodos para saber si uno  gana ---------------------------------------------------------//
++    private void verificaColumna(int Turno, int noColumnas) {
++        int suma = 0;
++        for (int i = noColumnas; i < 43; ) {
++            if (Aplicacion.cell[i - 1].getColourCelda() == Turno) {
++                suma++;
++                if (suma == 4) {
++                    // 2 = verde    1 =rojo
++                    if (Turno == 1) {
++                        Game.miDialogo.findViewById(R.id.layoutback).setBackground(getResources().getDrawable(R.drawable.borde_rounded2));
++                        txtWinner = Game.miDialogo.findViewById(R.id.txtGanador);
++                        ganador = "El ganador es" + Aplicacion.jugador1;
++                        txtWinner.setText(ganador);
++                        Game.miDialogo.show();
++                    } else {
++                        {
++                            Game.miDialogo.findViewById(R.id.layoutback).setBackground(getResources().getDrawable(R.drawable.borde_rounded3));
++                            txtWinner = Game.miDialogo.findViewById(R.id.txtGanador);
++                            ganador = "El ganador es" + Aplicacion.jugador2;
++                            txtWinner.setText(ganador);
++                            Game.miDialogo.show();
++                        }
++                    }
++
++                }
++            } else {
++                suma = 0;
++            }
++            i = i + 7;
++        }
++
++    }
++
++    private void verificaFila(int Turno, int valorfila) {
++        int suma = 0;
++        for (int i = valorfila; i < valorfila + 7; i++) {
++            if (Aplicacion.cell[i - 1].getColourCelda() == Turno) {
++                suma++;
++                if (suma == 4) {
++                    // 2 = verde    1 =rojo
++                    if (Turno == 1) {
++                        Game.miDialogo.findViewById(R.id.layoutback).setBackground(getResources().getDrawable(R.drawable.borde_rounded2));
++                        txtWinner = Game.miDialogo.findViewById(R.id.txtGanador);
++                        ganador = "El ganador es " + Aplicacion.jugador1;
++                        txtWinner.setText(ganador);
++                        Game.miDialogo.show();
++                    } else {
++                        Game.miDialogo.findViewById(R.id.layoutback).setBackground(getResources().getDrawable(R.drawable.borde_rounded3));
++                        txtWinner = Game.miDialogo.findViewById(R.id.txtGanador);
++                        ganador = "El ganador es " + Aplicacion.jugador2;
++                        txtWinner.setText(ganador);
++                        Game.miDialogo.show();
++                    }
++                }
++            } else {
++                suma = 0;
++            }
++        }
++
++    }
++
++    private void verificaDiagonal(int Turno, int valorDiagonal) {
++        int suma = 0;
++        for (int i = 0; i < Aplicacion.cell.length; i++) {
++
++            if (Aplicacion.cell[i].getValorDiagonal() == valorDiagonal) {
++
++                if (Aplicacion.cell[i].getColourCelda() == Turno) {
++                    suma++;
++                    if (suma == 4) {
++                        // 2 = verde    1 =rojo
++                        if (Turno == 1) {
++                            Game.miDialogo.findViewById(R.id.layoutback).setBackground(getResources().getDrawable(R.drawable.borde_rounded2));
++                            txtWinner = Game.miDialogo.findViewById(R.id.txtGanador);
++                            ganador = "El ganador es " + Aplicacion.jugador1;
++                            txtWinner.setText(ganador);
++                            Game.miDialogo.show();
++                        } else {
++                            Game.miDialogo.findViewById(R.id.layoutback).setBackground(getResources().getDrawable(R.drawable.borde_rounded3));
++                            txtWinner = Game.miDialogo.findViewById(R.id.txtGanador);
++                            ganador = "El ganador es " + Aplicacion.jugador2;
++                            txtWinner.setText(ganador);
++                            Game.miDialogo.show();
++                        }
++                    }
++                } else {
++                    suma = 0;
++                }
++            }
++
++        }
++    }
++
++    private void verificaDiagonalInversa(int Turno, int valorDiagonalInversa) {
++        int suma = 0;
++        for (int i = 0; i < Aplicacion.cell.length; i++) {
++            if (Aplicacion.cell[i].getDiagonalInversa() == valorDiagonalInversa) {
++                if (Aplicacion.cell[i].getColourCelda() == Turno) {
++                    suma++;
++                    if (suma == 4) {
++                        // 2 = verde    1 =rojo
++                        if (Turno == 1) {
++                            Game.miDialogo.findViewById(R.id.layoutback).setBackground(getResources().getDrawable(R.drawable.borde_rounded2));
++                            txtWinner = Game.miDialogo.findViewById(R.id.txtGanador);
++                            ganador = "El ganador es " + Aplicacion.jugador1;
++                            txtWinner.setText(ganador);
++                            Game.miDialogo.show();
++                        } else {
++                            Game.miDialogo.findViewById(R.id.layoutback).setBackground(getResources().getDrawable(R.drawable.borde_rounded3));
++                            txtWinner = Game.miDialogo.findViewById(R.id.txtGanador);
++                            ganador = "El ganador es " + Aplicacion.jugador2;
++                            txtWinner.setText(ganador);
++                            Game.miDialogo.show();
++                        }
++                    }
++                } else {
++                    suma = 0;
++                }
++            }
++        }
++
++    }
++
++    //-----------------------------------------------------------------------------------------------------------------//
++    private boolean llenaContenedorCorrespondiente(int ColumanaClicked) {
++        boolean anadida;
++        if (Aplicacion.Columnas[ColumanaClicked - 1] > 0) {
++            anadida = false;
++            switch (ColumanaClicked) {
++                case 1:
++                    llenaContainer(1, Aplicacion.Columnas[0], Aplicacion.turno);
++                    if (Aplicacion.Columnas[0] > 0) Aplicacion.Columnas[0]--;
++                    break;
++                case 2:
++                    llenaContainer(2, Aplicacion.Columnas[1], Aplicacion.turno);
++                    if (Aplicacion.Columnas[1] > 0) Aplicacion.Columnas[1]--;
++                    break;
++                case 3:
++                    llenaContainer(3, Aplicacion.Columnas[2], Aplicacion.turno);
++                    if (Aplicacion.Columnas[2] > 0) Aplicacion.Columnas[2]--;
++                    break;
++                case 4:
++                    llenaContainer(4, Aplicacion.Columnas[3], Aplicacion.turno);
++                    if (Aplicacion.Columnas[3] > 0) Aplicacion.Columnas[3]--;
++                    break;
++                case 5:
++                    llenaContainer(5, Aplicacion.Columnas[4], Aplicacion.turno);
++                    if (Aplicacion.Columnas[4] > 0) Aplicacion.Columnas[4]--;
++                    break;
++                case 6:
++                    llenaContainer(6, Aplicacion.Columnas[5], Aplicacion.turno);
++                    if (Aplicacion.Columnas[5] > 0) Aplicacion.Columnas[5]--;
++                    break;
++                case 7:
++                    llenaContainer(7, Aplicacion.Columnas[6], Aplicacion.turno);
++                    if (Aplicacion.Columnas[6] > 0) Aplicacion.Columnas[6]--;
++                    break;
++            }
++        } else {
++            for (int Columna : Aplicacion.Columnas) {
++                int d = 0;
++                if (Aplicacion.Columnas[ColumanaClicked - 1] > 0) {
++                    d++;
++                }
++                if (d == 7) {
++                    Toast.makeText(getContext(), "Tablero lleno, Reincie", Toast.LENGTH_LONG).show();
++                }
++            }
++            anadida = true;
++        }
++        return anadida;
++    }
++// --------------------------------------------------------------------------------------------------------------------------------//
++
++    public void setValorDiagonalInversa(int valorDiagonalInversa) {
++        this.DiagonalInversa = valorDiagonalInversa;
++    }
++
++    public void setValorDiagonal(int r, int c) {
++        ValorDiagonal = r + c;
++    }
++
++    //GETTER-------------------------------------------------------------------------------------------------------------------
++    public int getColumna() {
++        return columna;
++    }
++
++    // SETERS------------------------------------------------------------------------------------------------------------------------//
++    public void setColumna(int columna) {
++        this.columna = columna;
++    }
++
++    public com.example.thebryan.conecta4.Modelos.Contenedor getContenedor() {
++        return Contenedor;
++    }
++
++    public int getFila() {
++        return fila;
++    }
++
++    public void setFila(int fila) {
++        this.fila = fila;
++    }
++
++    public int getColourCelda() {
++        return Colour;
++    }
++
++    private void setColourCelda(int colour) {
++        this.Colour = colour;
++        this.Contenedor.Color(colour);
++    }
++
++    public int getValorFila() {
++        return valorFila;
++    }
++
++    public void setValorFila(int valorFila) {
++        this.valorFila = valorFila;
++    }
++
++    public int getID() {
++        return ID;
++    }
++
++    public int getDiagonalInversa() {
++        return DiagonalInversa;
++    }
++
++    public int getValorDiagonal() {
++        return ValorDiagonal;
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/thebryan/conecta4/Modelos/Contenedor.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/thebryan/conecta4/Modelos/Contenedor.java	(date 1529762380208)
++++ app/src/main/java/com/example/thebryan/conecta4/Modelos/Contenedor.java	(date 1529762380208)
+@@ -0,0 +1,41 @@
++package com.example.thebryan.conecta4.Modelos;
++
++import android.content.Context;
++import android.support.annotation.NonNull;
++import android.widget.FrameLayout;
++import android.widget.TextView;
++
++public class Contenedor extends android.support.v7.widget.AppCompatButton {
++    TextView titleText;
++    int idContainer;
++    int Columna;
++    private int Color = Celdas.COLOR_BLANCO;
++
++// SETTER
++
++    public Contenedor(@NonNull Context context, int id) {
++        super(context);
++        idContainer = id;
++        titleText = new TextView(context);
++        // this.addView(titleText);
++    }
++
++    // GETTER
++    public int getIdContainer() {
++        return idContainer;
++    }
++
++    public void setColumna(int columna, int valorFila, int i) {
++        Columna = columna;
++        Aplicacion.cell[i].setValorFila(valorFila);
++        titleText.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
++    }
++
++    public void Color(int color) {
++        this.Color = color;
++    }
++
++    public void setTitleText(String value) {
++        titleText.setText(value);
++    }
++}
+Index: app/src/main/java/com/example/thebryan/conecta4/Game.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/thebryan/conecta4/Game.java	(date 1529762380309)
++++ app/src/main/java/com/example/thebryan/conecta4/Game.java	(date 1529762380309)
+@@ -0,0 +1,254 @@
++package com.example.thebryan.conecta4;
++
++import android.annotation.SuppressLint;
++import android.app.Dialog;
++import android.content.Intent;
++import android.graphics.Color;
++import android.graphics.drawable.ColorDrawable;
++import android.graphics.drawable.GradientDrawable;
++import android.os.Bundle;
++import android.support.v7.app.AppCompatActivity;
++import android.util.DisplayMetrics;
++import android.view.MotionEvent;
++import android.view.View;
++import android.view.Window;
++import android.widget.Button;
++import android.widget.GridLayout;
++import android.widget.ImageView;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import com.example.thebryan.conecta4.Modelos.Aplicacion;
++import com.example.thebryan.conecta4.Modelos.Celdas;
++import com.example.thebryan.conecta4.Modelos.Contenedor;
++
++public class Game extends AppCompatActivity {
++    public static Dialog miDialogo;
++    public static Dialog miDialogoPausa;
++    public static ImageView imageTurno;
++    public TextView tv;
++    Button cerrarDiag;
++    Button cerrarDiagPausa;
++    Button Salir;
++    Button volverMenu;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_game);
++        saveDisplaySize();
++        tv = findViewById(R.id.txtNombreRojo);
++
++        tv.setText(Aplicacion.jugador1);
++        TextView tv1 = findViewById(R.id.txtNombreVerde);
++        tv1.setText(Aplicacion.jugador2);
++        imageTurno = findViewById(R.id.imgTurno);
++        if (Aplicacion.turno == 1) {
++            imageTurno.setImageResource(R.drawable.rojo);
++        } else {
++            imageTurno.setImageResource(R.drawable.verde);
++        }
++
++        // evento reiniciar //
++        findViewById(R.id.btnRestart).setOnTouchListener(new View.OnTouchListener() {
++            @SuppressLint("ClickableViewAccessibility")
++            @Override
++            public boolean onTouch(View view, MotionEvent motionEvent) {
++                for (int i = 0; i < Aplicacion.Columnas.length; i++) {
++                    Aplicacion.Columnas[i] = 6;
++                }
++                finish();
++                Aplicacion.GameIntent = new Intent(Game.this, Game.class);
++                startActivity(Aplicacion.GameIntent);
++                return false;
++            }
++        });
++        // Evento pausar//
++        findViewById(R.id.btnPause).setOnTouchListener(new View.OnTouchListener() {
++            @SuppressLint("ClickableViewAccessibility")
++            @Override
++            public boolean onTouch(View view, MotionEvent motionEvent) {
++                Toast.makeText(getBaseContext(), "Aqui1", Toast.LENGTH_LONG).show();
++                miDialogoPausa.show();
++                return false;
++            }
++        });
++        creaDialogo();
++
++        // btn Automatico //
++
++        GridLayout grid = findViewById(R.id.myGrid);
++        int padding = (Aplicacion.getAncho() / 8) / 2;
++        grid.setPadding(padding, padding, padding, padding);
++        grid.setColumnCount(7);
++        grid.setRowCount(6);
++        grid.setAlignmentMode(GridLayout.ALIGN_BOUNDS);
++        startGame(grid);
++    }
++
++    @Override
++    public void onBackPressed() {
++        for (int i = 0; i < Aplicacion.Columnas.length; i++) {
++            Aplicacion.Columnas[i] = 6;
++        }
++        finish();
++    }
++
++    //-------------------------------------------------------------------------------------------------------------------//
++    public void startGame(GridLayout gridLayout) {
++        int column = 7;
++        //redondear layout
++        GradientDrawable shape = new GradientDrawable();
++        shape.setShape(GradientDrawable.RECTANGLE);
++        shape.setColor(Color.WHITE);
++        shape.setCornerRadius(500.0f);
++        shape.setSize(Aplicacion.getAncho() / 8, Aplicacion.getAncho() / 8);
++        GradientDrawable shape2 = new GradientDrawable();
++        shape2.setShape(GradientDrawable.RECTANGLE);
++        shape2.setSize(Aplicacion.getAncho() / 8, Aplicacion.getAncho() / 8);
++        Contenedor contenedors[] = new Contenedor[42];
++
++        //iniciando container
++        for (int i = 0; i < contenedors.length; i++) {
++            contenedors[i] = new Contenedor(getBaseContext(), i + 1);
++            Aplicacion.cell[i] = new Celdas(getBaseContext(), contenedors[i], contenedors[i].getIdContainer());
++        }
++        int valorFila = 1;
++        for (int i = 0; i < Aplicacion.cell.length; i++) {
++            switch (Aplicacion.cell[i].getID()) {
++
++                case 4:
++                case 12:
++                case 20:
++                case 28:
++                    Aplicacion.cell[i].setValorDiagonalInversa(1);
++                    break;
++                case 3:
++                case 11:
++                case 19:
++                case 27:
++                case 35:
++                    Aplicacion.cell[i].setValorDiagonalInversa(2);
++                    break;
++                case 2:
++                case 10:
++                case 18:
++                case 26:
++                case 34:
++                case 42:
++                    Aplicacion.cell[i].setValorDiagonalInversa(3);
++                    break;
++                case 1:
++                case 9:
++                case 17:
++                case 25:
++                case 33:
++                case 41:
++                    Aplicacion.cell[i].setValorDiagonalInversa(4);
++                    break;
++                case 8:
++                case 16:
++                case 24:
++                case 32:
++                case 40:
++                    Aplicacion.cell[i].setValorDiagonalInversa(5);
++                    break;
++                case 15:
++                case 23:
++                case 31:
++                case 39:
++                    Aplicacion.cell[i].setValorDiagonalInversa(6);
++                    break;
++                default:
++                    Aplicacion.cell[i].setValorDiagonalInversa(0);
++                    break;
++            }
++        }
++        // anadiendo containers
++        for (int i = 0, c = 0, r = 0; i < contenedors.length; i++, c++) {
++            if (c == column) {
++                valorFila = valorFila + 7;
++                c = 0;
++                r++;
++            }
++            Aplicacion.cell[i].setValorFila(valorFila);
++            contenedors[i].setColumna(c + 1, valorFila, i);
++            contenedors[i].setBackground(shape);
++            Aplicacion.cell[i].setColumna(c + 1);
++            Aplicacion.cell[i].setValorDiagonal(r, c);
++            Aplicacion.cell[i].setFila(r + 1);
++            Aplicacion.cell[i].setBackground(shape2);
++            gridLayout.addView(Aplicacion.cell[i], i);
++        }
++    }
++
++    //-------------------------------------------------------------------------------------------------------------------//
++    public void saveDisplaySize() {
++        DisplayMetrics metrics = new DisplayMetrics();
++        getWindowManager().getDefaultDisplay().getMetrics(metrics);
++        int width = metrics.widthPixels;
++        Aplicacion.guarda_tamano_pantalla(width);
++    }
++
++    //  ----------------------------------------------------------------------------------------//
++    public void creaDialogo() {
++        miDialogo = new Dialog(Game.this);
++        miDialogo.requestWindowFeature(Window.FEATURE_NO_TITLE);
++        miDialogo.setContentView(R.layout.win_dialog);
++        miDialogo.setCanceledOnTouchOutside(false);
++        miDialogo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
++        View v = getWindow().getDecorView();
++        v.setBackgroundResource(android.R.color.transparent);
++        cerrarDiag = miDialogo.findViewById(R.id.btnSalirDialogo);
++        cerrarDiag.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                miDialogo.cancel();
++                Aplicacion.turno = Celdas.COLOR_ROJO;
++                Game.imageTurno.setImageResource(R.drawable.rojo);
++                finish();
++                startActivity(Aplicacion.GameIntent);
++                for (int i = 0; i < Aplicacion.Columnas.length; i++) {
++                    Aplicacion.Columnas[i] = 6;
++                }
++            }
++        });
++        miDialogoPausa = new Dialog(Game.this);
++        miDialogoPausa.requestWindowFeature(Window.FEATURE_NO_TITLE);
++        miDialogoPausa.setContentView(R.layout.pausa);
++        miDialogoPausa.setCanceledOnTouchOutside(true);
++        miDialogoPausa.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
++        View view = getWindow().getDecorView();
++        view.setBackgroundResource(android.R.color.transparent);
++        cerrarDiagPausa = miDialogoPausa.findViewById(R.id.btnVolverP);
++        cerrarDiagPausa.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                miDialogoPausa.cancel();
++
++            }
++        });
++        volverMenu = miDialogoPausa.findViewById(R.id.btnVolverMenuP);
++        volverMenu.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                for (int i = 0; i < Aplicacion.Columnas.length; i++) {
++                    Aplicacion.Columnas[i] = 6;
++                }
++                finish();
++                Aplicacion.turno = Celdas.COLOR_ROJO;
++            }
++        });
++        Salir = miDialogoPausa.findViewById(R.id.btnSalirJuegoP);
++        Salir.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                System.exit(0);
++                finish();
++
++            }
++        });
++    }
++
++
++}
+\ No newline at end of file
+Index: app/src/test/java/com/example/thebryan/conecta4/ExampleUnitTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/test/java/com/example/thebryan/conecta4/ExampleUnitTest.java	(date 1529762377118)
++++ app/src/test/java/com/example/thebryan/conecta4/ExampleUnitTest.java	(date 1529762377118)
+@@ -0,0 +1,17 @@
++package com.example.thebryan.conecta4;
++
++import org.junit.Test;
++
++import static org.junit.Assert.assertEquals;
++
++/**
++ * Example local unit test, which will execute on the development machine (host).
++ *
++ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
++ */
++public class ExampleUnitTest {
++    @Test
++    public void addition_isCorrect() {
++        assertEquals(4, 2 + 2);
++    }
++}
+\ No newline at end of file
