@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/borde_rounded"
+    android:orientation="vertical"
+
+    >
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Menu"
+    android:gravity="center"
+    android:textStyle="bold"
+    android:textSize="32sp"
+    android:fontFamily="sans-serif"
+    android:textColor="#99ef0000"
+    />
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:lottie_fileName="gears.json"
+        android:layout_gravity="center"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        />
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:padding="15dp"
+    android:id="@+id/btnVolverP"
+    android:background="@drawable/btnrounded2"
+    android:text="@string/volver"
+    />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:padding="15dp"
+        android:id="@+id/btnVolverMenuP"
+        android:background="@drawable/btnrounded2"
+        android:text="@string/volver_menu"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:padding="15dp"
+        android:id="@+id/btnSalirJuegoP"
+        android:background="@drawable/btnrounded2"
+        android:text="@string/salir_juego"
+        />
+</LinearLayout>

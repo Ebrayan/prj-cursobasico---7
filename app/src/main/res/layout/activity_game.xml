@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     android:orientation="vertical"
+    android:id="@+id/principal"
+    android:gravity="center"
+    android:background="@drawable/back"
+    android:splitMotionEvents="false"
+    tools:context=".Game">
+
+    <LinearLayout
+        android:id="@+id/turno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="top|left"
+        tools:ignore="RtlHardcoded,UseCompoundDrawables">
+
+
+        <TextView
+            android:id="@+id/txtTurno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:text="@string/turno"
+             />
+        <ImageView
+            android:id="@+id/imgTurno"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:maxWidth="80dp"
+            android:maxHeight="80dp"
+            android:src="@drawable/verde"
+
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutForBtns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+        <Button
+            android:id="@+id/btnPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="II"
+            android:textColor="#000"
+            android:background="@android:color/transparent"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textSize="35dp"
+            android:padding="10dp"
+            />
+        <ImageView
+            android:id="@+id/btnRestart"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:maxWidth="80dp"
+            android:maxHeight="80dp"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/restart"
+            />
+    </LinearLayout>
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        android:src="@drawable/title"
+
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp">
+        <GridLayout
+            android:id="@+id/myGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:splitMotionEvents="false" >
+        </GridLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ladoRojo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom|right"
+        tools:ignore="RtlHardcoded">
+
+        <TextView
+            android:id="@+id/txtNombreRojo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#16d401"
+            android:text="holla"
+            android:background="#fff"
+            />
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:maxWidth="80dp"
+            android:maxHeight="80dp"
+            android:src="@drawable/rojo"
+
+            />
+    </LinearLayout>
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:maxWidth="80dp"
+        android:maxHeight="80dp"
+        android:padding="10dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:src="@drawable/vs1"
+
+        />
+    <LinearLayout
+        android:id="@+id/ladoVerde"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom|left"
+        tools:ignore="RtlHardcoded,UseCompoundDrawables">
+
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:maxWidth="80dp"
+            android:maxHeight="80dp"
+            android:src="@drawable/verde"
+
+            />
+        <TextView
+            android:id="@+id/txtNombreVerde"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#16d401"
+            android:text="holla"
+            android:background="#fff"
+            />
+    </LinearLayout>
+
+</FrameLayout>

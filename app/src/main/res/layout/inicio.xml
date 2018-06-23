@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="15dp"
+android:layout_gravity="center"
+    android:background="@drawable/borde_rounded"
+    >
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:text="@string/modo_de_juego"
+    android:textStyle="bold"
+    android:textColor="#ffffff"
+    android:textSize="22sp"
+    android:fontFamily="sans-serif"
+    />
+
+    <RadioGroup
+    android:id="@+id/radio"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+     android:layout_gravity="center_horizontal">
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dos_jugadores"
+        android:id="@+id/btnMulti"
+        android:layout_marginTop="61dp"
+        android:checked="false"
+        android:textColor="#000"
+        android:onClick="onRadioButtonClicked"/>
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/un_jugador"
+        android:id="@+id/btnSolo"
+         android:checked="false"
+        android:textColor="#000"
+         android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+    <EditText
+        android:id="@+id/txtNombre1"
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:fontFamily="sans-serif"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_margin="20dp"
+        android:hint="@string/nombre_jugador_1"
+        android:visibility="invisible"
+        android:text=""
+        android:inputType="text" />
+    <EditText
+        android:id="@+id/txtNombre2"
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:fontFamily="sans-serif"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:layout_margin="20dp"
+        android:hint="@string/nombre_jugador_2"
+        android:visibility="invisible"
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/btnIniciar"
+        android:text="@string/entrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="#33ffffff"
+        android:textSize="20sp"
+        android:fontFamily="sans-serif"
+        android:padding="20dp"
+        android:layout_margin="20dp"
+        android:enabled="false"
+        android:background="@drawable/btnrounded2"
+
+        />
+</LinearLayout>

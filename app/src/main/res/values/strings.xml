@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">conecta 4</string>
+    <string name="dos_jugadores">Dos jugadores</string>
+    <string name="un_jugador">Un Jugador</string>
+    <string name="nombre_jugador_1">Nombre Jugador 1</string>
+    <string name="nombre_jugador_2">Nombre Jugador 2</string>
+    <string name="entrar">Entrar</string>
+    <string name="modo_de_juego">Selecciones Modo de Juego</string>
+    <string name="turno">Turno</string>
+    <string name="volver_menu">Volver Menu</string>
+    <string name="volver">Volver</string>
+    <string name="salir_juego">Salir Juego</string>
+</resources>
