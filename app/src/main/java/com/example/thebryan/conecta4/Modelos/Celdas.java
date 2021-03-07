@@ -5,8 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaPlayer;
-import android.support.annotation.NonNull;
-import android.view.MotionEvent;
+ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -17,7 +16,6 @@ import com.example.thebryan.conecta4.Game;
 import com.example.thebryan.conecta4.R;
 
 
-@SuppressLint("ViewConstructor")
 public class Celdas extends FrameLayout {
     public static final int COLOR_ROJO = 1;
     public static final int COLOR_VERDE = 2;
@@ -43,17 +41,12 @@ public class Celdas extends FrameLayout {
     private int fila;
 
     @SuppressLint("ClickableViewAccessibility")
-    public Celdas(@NonNull Context context, Contenedor contenedor, int id) {
+    public Celdas( Context context, Contenedor contenedor, int id) {
         super(context);
-
         Contenedor = contenedor;
-
         ID = id;
-
         this.addView(contenedor);
-
         mp = MediaPlayer.create(getContext(), R.raw.s2);
-
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,12 +144,12 @@ public class Celdas extends FrameLayout {
                     Aplicacion.cell[i].getContenedor().setBackground(shapeVerdeBorde);
                     Aplicacion.cell[i].setColourCelda(COLOR_VERDE);
                     Aplicacion.turno = COLOR_ROJO;
-                    Game.imageTurno.setImageResource(R.drawable.rojo);
+                 //   Game.imageTurno.setImageResource(R.drawable.rojo);
                 } else {
                     Aplicacion.cell[i].getContenedor().setBackground(shapeRojoBorde);
                     Aplicacion.cell[i].setColourCelda(COLOR_ROJO);
                     Aplicacion.turno = COLOR_VERDE;
-                    Game.imageTurno.setImageResource(R.drawable.verde);
+               //     Game.imageTurno.setImageResource(R.drawable.verde);
                 }
             }
             i  ++;

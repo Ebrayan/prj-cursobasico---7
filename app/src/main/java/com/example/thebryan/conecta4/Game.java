@@ -1,5 +1,4 @@
 package com.example.thebryan.conecta4;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
@@ -7,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,18 +16,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.thebryan.conecta4.Modelos.Aplicacion;
 import com.example.thebryan.conecta4.Modelos.Celdas;
 import com.example.thebryan.conecta4.Modelos.Contenedor;
 
 public class Game extends AppCompatActivity {
+
     public static Dialog miDialogo;
+
     public static Dialog miDialogoPausa;
-    public static ImageView imageTurno;
+
+   // public static ImageView imageTurno;
+
     public TextView tv;
+
     Button cerrarDiag;
+
     Button cerrarDiagPausa;
+
     Button Salir;
+
     Button volverMenu;
 
     @Override
@@ -42,12 +50,12 @@ public class Game extends AppCompatActivity {
         tv.setText(Aplicacion.jugador1);
         TextView tv1 = findViewById(R.id.txtNombreVerde);
         tv1.setText(Aplicacion.jugador2);
-        imageTurno = findViewById(R.id.imgTurno);
+      /*  imageTurno = findViewById(R.id.imgTurno);
         if (Aplicacion.turno == 1) {
             imageTurno.setImageResource(R.drawable.rojo);
         } else {
             imageTurno.setImageResource(R.drawable.verde);
-        }
+        }*/
 
         // evento reiniciar //
         findViewById(R.id.btnRestart).setOnTouchListener(new View.OnTouchListener() {
@@ -173,7 +181,7 @@ public class Game extends AppCompatActivity {
             }
             Aplicacion.cell[i].setValorFila(valorFila);
             contenedors[i].setColumna(c   +1, valorFila, i);
-            contenedors[i].setBackground(shape);
+            //contenedors[i].setBackground(shape);
             Aplicacion.cell[i].setColumna(c +  1);
             Aplicacion.cell[i].setValorDiagonal(r, c);
             Aplicacion.cell[i].setFila(r   +1);
@@ -181,7 +189,6 @@ public class Game extends AppCompatActivity {
             gridLayout.addView(Aplicacion.cell[i], i);
         }
     }
-
     //-------------------------------------------------------------------------------------------------------------------//
     public void saveDisplaySize() {
         DisplayMetrics metrics = new DisplayMetrics();
@@ -189,7 +196,6 @@ public class Game extends AppCompatActivity {
         int width = metrics.widthPixels;
         Aplicacion.guarda_tamano_pantalla(width);
     }
-
     //  ----------------------------------------------------------------------------------------//
     public void creaDialogo() {
         miDialogo = new Dialog(Game.this);
@@ -205,7 +211,7 @@ public class Game extends AppCompatActivity {
             public void onClick(View view) {
                 miDialogo.cancel();
                 Aplicacion.turno = Celdas.COLOR_ROJO;
-                Game.imageTurno.setImageResource(R.drawable.rojo);
+                //Game.imageTurno.setImageResource(R.drawable.rojo);
                 finish();
                 startActivity(Aplicacion.GameIntent);
                 for (int i = 0; i < Aplicacion.Columnas.length; i++  ) {
@@ -245,10 +251,7 @@ public class Game extends AppCompatActivity {
             public void onClick(View view) {
                 System.exit(0);
                 finish();
-
             }
         });
     }
-
-
 }
